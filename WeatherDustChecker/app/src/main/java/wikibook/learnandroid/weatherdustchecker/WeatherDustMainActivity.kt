@@ -59,10 +59,12 @@ class WeatherDustMainActivity : AppCompatActivity() {
 
                     override fun onPageSelected(position: Int) {
                         if(position == 0) {
-                            Toast.makeText(applicationContext, "날씨 페이지입니다.", Toast.LENGTH_SHORT).show()
+                            val fragment = mPager.adapter?.instantiateItem(mPager, position) as WeatherPageFragment
+                            fragment.startAnimation()
                         }
                         else if(position == 1) {
-                            Toast.makeText(applicationContext, "미세먼지 페이지입니다.", Toast.LENGTH_SHORT).show()
+                            val fragment = mPager.adapter?.instantiateItem(mPager, position) as DustPageFragment
+                            fragment.startAnimation()
                         }
                     }
 

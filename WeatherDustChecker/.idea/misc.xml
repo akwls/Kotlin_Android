@@ -6,8 +6,21 @@
         <entry key="..\:/Users/hajin/AndroidStudioProjects/WeatherDustChecker/app/src/main/res/layout/activity_main.xml" value="0.24427083333333333" />
         <entry key="..\:/Users/hajin/AndroidStudioProjects/WeatherDustChecker/app/src/main/res/layout/weather_main_activity.xml" value="0.12916666666666668" />
         <entry key="..\:/Users/hajin/AndroidStudioProjects/WeatherDustChecker/app/src/main/res/layout/weather_page_fragment.xml" value="0.17760416666666667" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/drawable/bg_gradient.xml" value="0.1925925925925926" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/drawable/ic_bad.xml" value="0.1925925925925926" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/drawable/ic_cloud.xml" value="0.1925925925925926" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/drawable/ic_cloudy.xml" value="0.1925925925925926" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/drawable/ic_flash.xml" value="0.1925925925925926" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/drawable/ic_good.xml" value="0.1925925925925926" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/drawable/ic_normal.xml" value="0.1925925925925926" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/drawable/ic_rain.xml" value="0.1925925925925926" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/drawable/ic_snow.xml" value="0.1925925925925926" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/drawable/ic_sun.xml" value="0.1925925925925926" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/drawable/ic_very_bad.xml" value="0.1925925925925926" />
         <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/layout/dust_page_fragment.xml" value="0.1" />
         <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/layout/weather_dust_main_activity.xml" value="0.11979166666666667" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/layout/weather_main_activity.xml" value="0.18489583333333334" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/WeatherDustChecker/app/src/main/res/layout/weather_page_fragment.xml" value="0.18489583333333334" />
       </map>
     </option>
   </component>

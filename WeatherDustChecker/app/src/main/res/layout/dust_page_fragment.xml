@@ -7,6 +7,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <TextView
+            android:textColor="@color/textColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/city_name"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:text="지역"
+            android:textSize="20sp" />
         <ImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
@@ -15,6 +24,7 @@
             android:layout_gravity="center" />
 
         <TextView
+            android:textColor="@color/textColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dust_status_title"
@@ -24,6 +34,7 @@
             android:textSize="20sp" />
 
         <TextView
+            android:textColor="@color/textColorHighlight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dust_pm25_status_text"
@@ -33,6 +44,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:textColor="@color/textColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dust_pm25_intensity_text"
@@ -41,6 +53,7 @@
             android:textSize="20sp" />
 
         <TextView
+            android:textColor="@color/textColorHighlight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dust_pm10_status_text"
@@ -49,12 +62,43 @@
             android:textSize="20sp" />
 
         <TextView
+            android:textColor="@color/textColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dust_pm10_intensity_text"
             android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:textSize="16sp" />
+
+        <TextView
+            android:textColor="@color/textColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/co2"
+            android:text="이산화 탄소 : "
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:textSize="16sp" />
+        <TextView
+            android:textColor="@color/textColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/o3"
+            android:text="오존 : "
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:textSize="16sp" />
+        <TextView
+            android:textColor="@color/textColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/no2"
+            android:text="이산화 질소 : "
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:textSize="16sp" />
+
+
     </LinearLayout>
 
 </ScrollView>
