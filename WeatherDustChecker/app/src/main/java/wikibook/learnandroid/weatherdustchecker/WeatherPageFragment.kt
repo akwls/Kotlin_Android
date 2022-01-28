@@ -49,6 +49,12 @@ class WeatherPageFragment : Fragment() {
     fun startAnimation() {
         val fadeIn = AnimationUtils.loadAnimation(activity, R.anim.fade_in)
         weatherImage.startAnimation(fadeIn)
+
+        val textAnimation = AnimationUtils.loadAnimation(activity, R.anim.text_anim)
+        statusText.startAnimation(textAnimation)
+        temperatureText.startAnimation(textAnimation)
+        pressure.startAnimation(textAnimation)
+        humidity.startAnimation(textAnimation)
     }
 
     override fun onCreateView(

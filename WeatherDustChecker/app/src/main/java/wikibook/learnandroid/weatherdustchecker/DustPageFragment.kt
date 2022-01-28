@@ -75,6 +75,15 @@ class DustPageFragment : Fragment() {
     fun startAnimation() {
         val fadeIn = AnimationUtils.loadAnimation(activity, R.anim.fade_in)
         statusImage.startAnimation(fadeIn)
+
+        val textAnimation = AnimationUtils.loadAnimation(activity, R.anim.text_anim)
+        pm10StatusText.startAnimation(textAnimation)
+        pm25StatusText.startAnimation(textAnimation)
+        pm10IntensityText.startAnimation(textAnimation)
+        pm25IntensityText.startAnimation(textAnimation)
+        co2.startAnimation(textAnimation)
+        o3.startAnimation(textAnimation)
+        no2.startAnimation(textAnimation)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
