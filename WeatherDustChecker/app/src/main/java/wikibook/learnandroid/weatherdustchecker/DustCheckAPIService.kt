@@ -26,6 +26,58 @@ interface DustCheckAPIService {
 data class DustCheckResponseFromGSON(val pm10: Int, val pm25: Int, val pm10Status: String, val pm25Status: String, val co2: Double, val o3: Double, val no2: Double, val cityName: String)
 
 class DustCheckerResponseDeserializerGSON : JsonDeserializer<DustCheckResponseFromGSON> {
+    private fun changedCheckCategory(aqi: Int?) : String {
+        var beforeMin = 0
+        var beforeMax = 0
+        var newMin = 0
+        var newMax = 0
+        when(aqi) {
+            null -> "알 수 없음"
+            in(0 .. 50) -> {
+                beforeMax = 50
+                newMax = 54
+            }
+            in(51 .. 100) -> {
+                beforeMin = 51
+                beforeMax = 100
+                newMin = 55
+                newMax = 154
+            }
+            in(101..150) -> {
+                beforeMin = 101
+                beforeMax = 150
+                newMin = 155
+                newMax = 254
+            }
+            in(151 .. 200) -> {
+                beforeMin = 151
+                beforeMax = 200
+                newMin = 255
+                newMax = 354
+            }
+            in(201..300) -> {
+                beforeMin = 201
+                beforeMax = 300
+                newMin = 355
+                newMax = 424
+            }
+            else -> {
+                beforeMin = 301
+                beforeMax = 500
+                newMin = 425
+                newMax = 604
+            }
+        }
+        val m3 = (((aqi!! - beforeMin) * (newMax - newMin)) / (beforeMax - beforeMin) + newMin)
+        Log.d("dust", "${aqi} ${m3}")
+        return when(m3) {
+            in(0 .. 154) -> "좋음"
+            in(155 .. 254) -> "보통"
+            in(255 .. 354) -> "나쁨"
+            else -> "매우 나쁨"
+        }
+    }
+
     private val checkCategory = { aqi: Int? -> when(aqi) {
         null -> "알 수 없음"
         in(0 .. 100) -> "좋음"
@@ -58,7 +110,7 @@ class DustCheckerResponseDeserializerGSON : JsonDeserializer<DustCheckResponseFr
         var cityName = cityNode?.get("name")?.asString?.split(",")?.get(0)
         Log.d("cityname", "$cityName")
 
-        return DustCheckResponseFromGSON(pm10!!, pm25!!, checkCategory(pm10), checkCategory(pm25), co2!!, o3!!, no2!!, cityName!!)
+        return DustCheckResponseFromGSON(pm10!!, pm25!!, checkCategory(pm10), changedCheckCategory(pm25), co2!!, o3!!, no2!!, cityName!!)
     }
 
     /*
