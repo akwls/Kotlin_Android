@@ -1,8 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.viewpager.widget.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/pager"
-    android:background="@drawable/bg_gradient">
+    android:layout_height="match_parent">
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/pager"
+        android:background="@drawable/bg_gradient">
 
-</androidx.viewpager.widget.ViewPager>
+    </androidx.viewpager.widget.ViewPager>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/loading_screen">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinning_wheel"
+            android:minHeight="100dp"
+            android:minWidth="100dp"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/textColorHighlight" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="날씨 및 미세먼지 정보를\n불러오고 있습니다."
+            android:layout_below="@+id/spinning_wheel"
+            android:textColor="@color/textColorHighlight"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center"/>
+    </RelativeLayout>
+
+</RelativeLayout>

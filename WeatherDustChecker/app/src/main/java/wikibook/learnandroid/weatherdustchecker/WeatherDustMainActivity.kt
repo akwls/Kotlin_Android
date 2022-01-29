@@ -8,6 +8,8 @@ import android.location.LocationListener
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -20,6 +22,7 @@ import java.util.jar.Manifest
 
 class WeatherDustMainActivity : AppCompatActivity() {
     private lateinit var mPager: ViewPager
+    private lateinit var loadingScreen: RelativeLayout
     private var lat: Double = 0.0
     private var lon: Double = 0.0
 
@@ -35,6 +38,7 @@ class WeatherDustMainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         mPager = findViewById(R.id.pager)
+        loadingScreen = findViewById(R.id.loading_screen)
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
@@ -71,7 +75,9 @@ class WeatherDustMainActivity : AppCompatActivity() {
                     override fun onPageScrollStateChanged(state: Int) {
                     }
 
+
                 })
+                loadingScreen.visibility = View.GONE
             }
 
         }
