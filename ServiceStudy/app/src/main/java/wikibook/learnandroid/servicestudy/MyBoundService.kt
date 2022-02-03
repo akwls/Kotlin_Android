@@ -27,6 +27,6 @@ class MyBoundService : Service() {
         return super.onUnbind(intent)
     }
 
-    fun getRandomNum(from: Int, until: Int = 100) = Random.nextInt(from, until)
+    fun getRandomNum(from: Int = 0, until: Int = 100) = Random.nextInt(from, until)
 
 }
