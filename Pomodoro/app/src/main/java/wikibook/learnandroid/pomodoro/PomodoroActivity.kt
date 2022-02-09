@@ -14,16 +14,8 @@ class PomodoroActivity : AppCompatActivity() {
             val cancelIntent = Intent(PomodoroService.ACTION_ALARM_CANCEL)
             sendBroadcast(cancelIntent)
 
-            val i = Intent(this, PomodoroService::class.java)
-            i.putExtra("delayTimeInSec", 60 * 1)
-            i.putExtra("startTime", System.currentTimeMillis())
-
-            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                startForegroundService(i)
-            }
-            else {
-                startService(i)
-            }
+            val dialog = PomodoroTimeSelectFragment()
+            dialog.show(supportFragmentManager, "pomodoro_time_select_dialog")
         }
 
         findViewById<Button>(R.id.pomodoro_timer_cancel).setOnClickListener {
