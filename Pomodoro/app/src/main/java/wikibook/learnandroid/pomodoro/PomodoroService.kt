@@ -11,6 +11,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import java.util.*
 
 class PomodoroService : Service() {
 
@@ -18,7 +19,10 @@ class PomodoroService : Service() {
         val ALARM_CHANNEL_NAME = "뽀모도로 알람"
         val ACTION_ALARM_CANCEL = "wikibook.learnandroid.pomodoro.ACTION_ALARM_CANCEL"
         val ACTION_ALARM = "wikibook.learnandroid.pomodoro.ACTION_ALARM"
+        val ACTION_REMAIN_TIME_NOTIFY = "wikibook.learnandroid.pomodoro.ACTION_SEND_COUNT"
     }
+
+    lateinit var timer : Timer
 
     var delayTimeInSec : Int = 0
     var startTime: Long = 0
@@ -109,6 +113,8 @@ class PomodoroService : Service() {
         // 생성한 알림 객체 전달.
         startForeground(1, notification)
 
+        startRemainTimeNotifyTimer()
+
         return Service.START_NOT_STICKY
 
     }
@@ -122,4 +128,20 @@ class PomodoroService : Service() {
         unregisterReceiver(receiver)
     }
 
+
+    fun startRemainTimeNotifyTimer() {
+        timer = Timer()
+        timer.schedule(object : TimerTask() {
+            override fun run() {
+                val diff = ((endTime - System.currentTimeMillis()) / 1000) * 1000
+                val i = Intent(ACTION_REMAIN_TIME_NOTIFY)
+                i.putExtra("count", diff)
+                sendBroadcast(i)
+            }
+        }, 0, 1000)
+    }
+
+    fun cancelRemainTimeNotifyTimer() {
+        timer?.cancel()
+    }
 }
