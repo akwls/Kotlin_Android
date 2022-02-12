@@ -126,6 +126,8 @@ class PomodoroService : Service() {
         alarmManager.cancel(alarmBroadcastIntent)
 
         unregisterReceiver(receiver)
+
+        cancelRemainTimeNotifyTimer()
     }
 
 

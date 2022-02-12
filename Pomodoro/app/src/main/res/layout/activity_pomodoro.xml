@@ -7,6 +7,15 @@
     tools:context=".PomodoroActivity"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/remain_time"
+        android:text="-"
+        android:textSize="60dp"
+        android:gravity="center"
+        android:textStyle="bold" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
