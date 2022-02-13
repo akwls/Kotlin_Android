@@ -61,7 +61,6 @@ class PomodoroTimeSelectFragment : DialogFragment() {
                 val i = Intent(it, PomodoroService::class.java)
                 i.putExtra("delayTimeInSec", delay.toInt())
                 i.putExtra("startTime", System.currentTimeMillis())
-                i.putExtra("notifyMethod", "beep")
 
                 i.putExtra("notifyMethod", it.getSharedPreferences(SettingFragment.SETTING_PREF_FILENAME, Context.MODE_PRIVATE)?.getString("notify_method", "vibration"))
                 i.putExtra("volume", it.getSharedPreferences(SettingFragment.SETTING_PREF_FILENAME, Context.MODE_PRIVATE)?.getInt("volume", 50))

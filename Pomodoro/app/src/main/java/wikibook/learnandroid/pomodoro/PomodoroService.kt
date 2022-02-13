@@ -11,8 +11,11 @@ import android.os.Build
 import android.os.IBinder
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import java.text.SimpleDateFormat
 import java.util.*
 
 class PomodoroService : Service() {
@@ -34,6 +37,10 @@ class PomodoroService : Service() {
     lateinit var receiver: BroadcastReceiver
     lateinit var alarmBroadcastIntent: PendingIntent
 
+    lateinit var builder: NotificationCompat.Builder
+
+    val dateFormatter = SimpleDateFormat("h:mm:ss")
+
     lateinit var soundPool: SoundPool
     var soundId = 0
 
@@ -49,7 +56,7 @@ class PomodoroService : Service() {
         startTime = intent!!.getLongExtra("startTime", 0)
         endTime = startTime + (delayTimeInSec * 1000)
 
-        val notifyMethod = intent.getStringExtra("notifyMethod")
+        val notifyMethod = intent!!.getStringExtra("notifyMethod")
         volume = intent.getIntExtra("volume", 50)
 
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -83,42 +90,44 @@ class PomodoroService : Service() {
                 val action = p1!!.action
                 when(action) {
                     ACTION_ALARM -> {
+                        Log.d("volume", volume.toString())
                         // 3초 동안 알람 진동.
-                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            vibrator.vibrate(VibrationEffect.createOneShot(vibrationInMs, VibrationEffect.DEFAULT_AMPLITUDE))
+                        when (notifyMethod) {
+                            "vibration" -> {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    vibrator.vibrate(
+                                        VibrationEffect.createOneShot(
+                                            vibrationInMs,
+                                            VibrationEffect.DEFAULT_AMPLITUDE
+                                        )
+                                    )
+                                } else {
+                                    vibrator.vibrate(vibrationInMs)
+                                }
+                                stopSelf()
+                            }
+                            "beep" -> {
+                                Toast.makeText(application, "효과음 재생", Toast.LENGTH_SHORT).show()
+                                soundPool.play(soundId, (volume * 0.01).toFloat(), (volume * 0.01).toFloat(), 1, 0, 1f)
+                                stopSelf()
+                            }
+                            "music" -> {
+                                Toast.makeText(application, "음악 재생", Toast.LENGTH_SHORT).show()
+                                mediaPlayer.start()
+                                cancelRemainTimeNotifyTimer()
+                                mediaPlayer.setOnCompletionListener {
+                                    stopSelf()
+                                }
+                            }
                         }
-                        else {
-                            vibrator.vibrate(vibrationInMs)
-                        }
-                        stopSelf()
                     }
                     ACTION_ALARM_CANCEL -> stopSelf()
-                }
-                when(notifyMethod) {
-                    "vibration" -> {
-                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            vibrator.vibrate(VibrationEffect.createOneShot(vibrationInMs, VibrationEffect.DEFAULT_AMPLITUDE))
-                        }
-                        else {
-                            vibrator.vibrate(vibrationInMs)
-                        }
-                        stopSelf()
-                    }
-                    "beep" -> {
-                        soundPool.play(soundId, (volume * 0.01).toFloat(), (volume * 0.01).toFloat(), 1, 0, 1f)
-                        stopSelf()
-                    }
-                    "music" -> {
-                        mediaPlayer.start()
-                        cancelRemainTimeNotifyTimer()
-                        mediaPlayer.setOnCompletionListener {
-                            stopSelf()
-                        }
+                    Intent.ACTION_SCREEN_ON -> startRemainTimeNotifyTimer()
+                    Intent.ACTION_SCREEN_OFF -> cancelRemainTimeNotifyTimer()
                     }
                 }
             }
 
-        }
 
         val filter = IntentFilter()
         filter.addAction(ACTION_ALARM)
@@ -135,7 +144,6 @@ class PomodoroService : Service() {
             notificationManager.createNotificationChannel(notificationChannel)
         }
 
-        var builder: NotificationCompat.Builder
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             builder = NotificationCompat.Builder(this, ALARM_CHANNEL_NAME)
         }
@@ -143,10 +151,14 @@ class PomodoroService : Service() {
             builder = NotificationCompat.Builder(this)
         }
 
-        val notification = builder.setContentTitle("뽀모도로 시작")
+        val activityStartIntent = Intent(this, PomodoroActivity::class.java)
+        val activityStartPendingIntent = PendingIntent.getActivity(this, 1, activityStartIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val notification = builder.setContentTitle("${dateFormatter.format(Date(startTime))}부터 ${dateFormatter.format(Date(endTime))}까지")
             .setContentText("시작됨")
             .setSmallIcon(R.drawable.ic_tomato) // 반드시 호출해야 함.
             .setOnlyAlertOnce(true)
+            .setContentIntent(activityStartPendingIntent)
             .build()
 
         // 서비스를 포어그라운드 서비스로 시작하도록 조정.
@@ -187,6 +199,18 @@ class PomodoroService : Service() {
                 val i = Intent(ACTION_REMAIN_TIME_NOTIFY)
                 i.putExtra("count", diff)
                 sendBroadcast(i)
+
+                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                if(diff <= 0) {
+                    val notification = builder.setContentTitle("완료").setContentText("-").build()
+                    notificationManager.notify(1, notification)
+                    cancel()
+                }
+                else {
+                    val remainInSec = diff / 1000
+                    val notification = builder.setContentText("남은 시간 : ${remainInSec / 60}:${String.format("%02d", remainInSec%60)}").build()
+                    notificationManager.notify(1, notification)
+                }
             }
         }, 0, 1000)
     }
