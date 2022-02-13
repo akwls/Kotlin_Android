@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.media.MediaPlayer
+import android.media.SoundPool
 import android.os.Build
 import android.os.IBinder
 import android.os.VibrationEffect
@@ -32,6 +34,13 @@ class PomodoroService : Service() {
     lateinit var receiver: BroadcastReceiver
     lateinit var alarmBroadcastIntent: PendingIntent
 
+    lateinit var soundPool: SoundPool
+    var soundId = 0
+
+    lateinit var mediaPlayer: MediaPlayer
+
+    var volume : Int = 0
+
     override fun onBind(intent: Intent): IBinder? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -40,8 +49,17 @@ class PomodoroService : Service() {
         startTime = intent!!.getLongExtra("startTime", 0)
         endTime = startTime + (delayTimeInSec * 1000)
 
+        val notifyMethod = intent.getStringExtra("notifyMethod")
+        volume = intent.getIntExtra("volume", 50)
+
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         val vibrationInMs : Long = 1000 * 3
+
+        soundPool = SoundPool.Builder().build()
+        soundId = soundPool.load(this, R.raw.beep, 1)
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.alarm_music)
+        mediaPlayer.setVolume((volume * 0.01).toFloat(), (volume * 0.01).toFloat())
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -75,6 +93,28 @@ class PomodoroService : Service() {
                         stopSelf()
                     }
                     ACTION_ALARM_CANCEL -> stopSelf()
+                }
+                when(notifyMethod) {
+                    "vibration" -> {
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            vibrator.vibrate(VibrationEffect.createOneShot(vibrationInMs, VibrationEffect.DEFAULT_AMPLITUDE))
+                        }
+                        else {
+                            vibrator.vibrate(vibrationInMs)
+                        }
+                        stopSelf()
+                    }
+                    "beep" -> {
+                        soundPool.play(soundId, (volume * 0.01).toFloat(), (volume * 0.01).toFloat(), 1, 0, 1f)
+                        stopSelf()
+                    }
+                    "music" -> {
+                        mediaPlayer.start()
+                        cancelRemainTimeNotifyTimer()
+                        mediaPlayer.setOnCompletionListener {
+                            stopSelf()
+                        }
+                    }
                 }
             }
 
@@ -121,6 +161,14 @@ class PomodoroService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+
+        if(mediaPlayer.isPlaying) {
+            mediaPlayer.stop()
+        }
+
+        mediaPlayer.release()
+
+        cancelRemainTimeNotifyTimer()
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(alarmBroadcastIntent)

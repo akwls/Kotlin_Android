@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Pomodoro</string>
+    <array name="notify_method_entries">
+        <item>진동</item>
+        <item>효과음</item>
+        <item>음악</item>
+    </array>
+    <array name="notify_method_values">
+        <item>vibration</item>
+        <item>beep</item>
+        <item>music</item>
+    </array>
 </resources>

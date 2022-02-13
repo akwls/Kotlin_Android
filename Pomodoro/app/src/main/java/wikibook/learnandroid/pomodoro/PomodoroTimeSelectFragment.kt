@@ -2,6 +2,7 @@ package wikibook.learnandroid.pomodoro
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,7 +27,9 @@ class PomodoroTimeSelectFragment : DialogFragment() {
             startPomodoro(sec)
         }
 
-        "5,10,15,20,25,30".split(",")?.forEach {
+        val times = activity?.getSharedPreferences(SettingFragment.SETTING_PREF_FILENAME, Context.MODE_PRIVATE)?.getString("preset_times","5,10,15,20,25,30")
+
+        times?.split(",")?.forEach {
             val time = it.trim()
             val btn = Button(activity)
 
@@ -58,6 +61,10 @@ class PomodoroTimeSelectFragment : DialogFragment() {
                 val i = Intent(it, PomodoroService::class.java)
                 i.putExtra("delayTimeInSec", delay.toInt())
                 i.putExtra("startTime", System.currentTimeMillis())
+                i.putExtra("notifyMethod", "beep")
+
+                i.putExtra("notifyMethod", it.getSharedPreferences(SettingFragment.SETTING_PREF_FILENAME, Context.MODE_PRIVATE)?.getString("notify_method", "vibration"))
+                i.putExtra("volume", it.getSharedPreferences(SettingFragment.SETTING_PREF_FILENAME, Context.MODE_PRIVATE)?.getInt("volume", 50))
 
                 if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     it.startForegroundService(i)

@@ -28,4 +28,10 @@
         android:id="@+id/pomodoro_timer_cancel"
         android:text="타이머 취소" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pomodoro_setting"
+        android:text="타이머 설정" />
+
 </LinearLayout>

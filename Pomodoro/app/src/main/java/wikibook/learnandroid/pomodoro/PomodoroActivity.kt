@@ -41,12 +41,16 @@ class PomodoroActivity : AppCompatActivity() {
             remainTime.setTextColor(getColor(R.color.purple_200))
         }
 
+        findViewById<Button>(R.id.pomodoro_setting).setOnClickListener {
+            startActivity(Intent(this, SettingActivity::class.java))
+        }
+
         receiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
                 val action = p1?.action
 
                 if(action == PomodoroService.ACTION_REMAIN_TIME_NOTIFY) {
-                    val remainInSec = intent.getLongExtra("count", 0) / 1000
+                    val remainInSec = p1.getLongExtra("count", 0) / 1000
                     remainTime.text = "${remainInSec / 60}:${String.format("%02d", remainInSec % 60)}"
 
                     if(remainInSec <= 10) {
