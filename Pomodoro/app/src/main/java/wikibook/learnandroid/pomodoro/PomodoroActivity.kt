@@ -4,11 +4,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toolbar
 import androidx.annotation.RequiresApi
 
 class PomodoroActivity : AppCompatActivity() {
@@ -19,6 +22,16 @@ class PomodoroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pomodoro)
+
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        toolbar.findViewById<ImageButton>(R.id.to_setting).setOnClickListener {
+            startActivity(Intent(this, SettingActivity::class.java))
+        }
+
+        window.statusBarColor = Color.rgb(255,0,0)
+
 
         remainTime = findViewById(R.id.remain_time)
 
