@@ -198,6 +198,7 @@ class PomodoroService : Service() {
                 val diff = ((endTime - System.currentTimeMillis()) / 1000) * 1000
                 val i = Intent(ACTION_REMAIN_TIME_NOTIFY)
                 i.putExtra("count", diff)
+                i.putExtra("delay", delayTimeInSec)
                 sendBroadcast(i)
 
                 val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

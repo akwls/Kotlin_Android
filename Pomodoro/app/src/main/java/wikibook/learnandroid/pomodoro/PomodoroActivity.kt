@@ -18,6 +18,8 @@ class PomodoroActivity : AppCompatActivity() {
     lateinit var remainTime : TextView
     lateinit var receiver : BroadcastReceiver
 
+    lateinit var remainProgress: ProgressView
+
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +33,8 @@ class PomodoroActivity : AppCompatActivity() {
         }
 
         window.statusBarColor = Color.rgb(255,0,0)
+
+        remainProgress = findViewById(R.id.remain_progress)
 
 
         remainTime = findViewById(R.id.remain_time)
@@ -54,10 +58,6 @@ class PomodoroActivity : AppCompatActivity() {
             remainTime.setTextColor(getColor(R.color.purple_200))
         }
 
-        findViewById<Button>(R.id.pomodoro_setting).setOnClickListener {
-            startActivity(Intent(this, SettingActivity::class.java))
-        }
-
         receiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
                 val action = p1?.action
@@ -65,6 +65,10 @@ class PomodoroActivity : AppCompatActivity() {
                 if(action == PomodoroService.ACTION_REMAIN_TIME_NOTIFY) {
                     val remainInSec = p1.getLongExtra("count", 0) / 1000
                     remainTime.text = "${remainInSec / 60}:${String.format("%02d", remainInSec % 60)}"
+
+                    val delayInSec = p1.getIntExtra("delay", 0)
+                    remainProgress.progress = (remainInSec / delayInSec.toDouble()) * 100
+
 
                     if(remainInSec <= 10) {
                         remainTime.setTextColor(getColor(R.color.purple_700))
