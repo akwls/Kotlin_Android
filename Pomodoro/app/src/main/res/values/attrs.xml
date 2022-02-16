@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ProgressViewAttrs">
-        <attr name="progressBackgroundImage" format="boolean" />
+        <attr name="progressBackgroundImage" format="reference" />
         <attr name="showBackgroundImage" format="boolean" />
         <attr name="progressBackgroundColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="RectangleProgressViewAttrs">
+        <attr name="directionReverse" format="boolean" />
     </declare-styleable>
 </resources>

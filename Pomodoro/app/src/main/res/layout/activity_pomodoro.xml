@@ -39,6 +39,7 @@
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
+<!--
     <wikibook.learnandroid.pomodoro.ProgressView
         android:layout_width="200dp"
         android:layout_height="200dp"
@@ -49,6 +50,16 @@
         app:progressBackgroundColor="#FF0000"
         app:progressBackgroundImage="@drawable/tomato"
         app:showBackgroundImage="true" />
+-->
+
+    <wikibook.learnandroid.pomodoro.RectangleProgressView
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/remain_progress"
+        app:directionReverse="true"/>
 
     <TextView
         android:layout_width="match_parent"

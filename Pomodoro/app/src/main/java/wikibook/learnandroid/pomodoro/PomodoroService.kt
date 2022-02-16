@@ -15,6 +15,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,8 +40,6 @@ class PomodoroService : Service() {
 
     lateinit var builder: NotificationCompat.Builder
 
-    val dateFormatter = SimpleDateFormat("h:mm:ss")
-
     lateinit var soundPool: SoundPool
     var soundId = 0
 
@@ -60,7 +59,7 @@ class PomodoroService : Service() {
         volume = intent.getIntExtra("volume", 50)
 
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        val vibrationInMs : Long = 1000 * 3
+        val vibrationInMs = intent.getLongExtra("vibrateTime", 3) * 1000
 
         soundPool = SoundPool.Builder().build()
         soundId = soundPool.load(this, R.raw.beep, 1)
@@ -84,6 +83,14 @@ class PomodoroService : Service() {
         // System.currentTimeMillis() + delay : 알람이 발생할 시간 설정.
         // alarmBroadcastIntent 알람이 발생하는 시점에 전달될 펜딩 인텐트 객체
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, alarmBroadcastIntent)
+
+        val dateFormat = intent.getStringExtra("timeFormat")
+        var dateFormatter: SimpleDateFormat
+        try {
+            dateFormatter = SimpleDateFormat(dateFormat)
+        } catch (e: IllegalArgumentException) {
+            dateFormatter = SimpleDateFormat("h:mm:ss")
+        }
 
         receiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {

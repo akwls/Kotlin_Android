@@ -18,7 +18,7 @@ class PomodoroActivity : AppCompatActivity() {
     lateinit var remainTime : TextView
     lateinit var receiver : BroadcastReceiver
 
-    lateinit var remainProgress: ProgressView
+    lateinit var remainProgress: RectangleProgressView
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {

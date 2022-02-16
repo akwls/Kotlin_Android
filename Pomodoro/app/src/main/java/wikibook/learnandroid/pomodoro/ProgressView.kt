@@ -43,7 +43,7 @@ class ProgressView : View {
 
         bgColor = array.getColor(R.styleable.ProgressViewAttrs_progressBackgroundColor, 0)
 
-        showBackgroudImage = array.getBoolean(R.styleable.ProgressViewAttrs_progressBackgroundImage, false)
+        showBackgroudImage = array.getBoolean(R.styleable.ProgressViewAttrs_showBackgroundImage, false)
 
         srcResId = array.getResourceId(R.styleable.ProgressViewAttrs_progressBackgroundImage, 0)
 

@@ -64,6 +64,8 @@ class PomodoroTimeSelectFragment : DialogFragment() {
 
                 i.putExtra("notifyMethod", it.getSharedPreferences(SettingFragment.SETTING_PREF_FILENAME, Context.MODE_PRIVATE)?.getString("notify_method", "vibration"))
                 i.putExtra("volume", it.getSharedPreferences(SettingFragment.SETTING_PREF_FILENAME, Context.MODE_PRIVATE)?.getInt("volume", 50))
+                i.putExtra("vibrateTime", it.getSharedPreferences(SettingFragment.SETTING_PREF_FILENAME, Context.MODE_PRIVATE)?.getString("vibrate_time", "3")?.toLong())
+                i.putExtra("timeFormat", it.getSharedPreferences(SettingFragment.SETTING_PREF_FILENAME, Context.MODE_PRIVATE)?.getString("time_format", "h:mm:ss"))
 
                 if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     it.startForegroundService(i)
