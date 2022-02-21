@@ -6,11 +6,27 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+class StringListTypeConverter {
+    // (1)
+    @TypeConverter
+    fun stringListToString(stringList: List<String>?): String? {
+        return stringList?.joinToString(",")
+    }
+
+    // (2)
+    @TypeConverter
+    fun stringToStringList(string: String?): List<String>? {
+        return string?.split(",")?.toList()
+    }
+}
 
 @Entity(tableName = "quiz")
-class Quiz(var type: String?, var question: String?, var answer: String?, var category: String?,
+data class Quiz(
+    var type: String?, var question: String?, var answer: String?, var category: String?,
+    // (2)
     @TypeConverters(StringListTypeConverter::class)
-    var guesses: List<String>?=null,
+    var guesses: List<String>? = null,
+    // (3)
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null
 ) : Parcelable {
@@ -21,13 +37,10 @@ class Quiz(var type: String?, var question: String?, var answer: String?, var ca
         parcel.readString(),
         parcel.createStringArrayList(),
         parcel.readValue(Long::class.java.classLoader) as? Long
-    ) {}
-
-    override fun describeContents(): Int {
-        return 0
+    ) {
     }
 
-    override fun writeToParcel(parcel: Parcel, p1: Int) {
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(type)
         parcel.writeString(question)
         parcel.writeString(answer)
@@ -36,28 +49,17 @@ class Quiz(var type: String?, var question: String?, var answer: String?, var ca
         parcel.writeValue(id)
     }
 
+    override fun describeContents(): Int {
+        return 0
+    }
+
     companion object CREATOR : Parcelable.Creator<Quiz> {
         override fun createFromParcel(parcel: Parcel): Quiz {
             return Quiz(parcel)
         }
 
-        override fun newArray(p0: Int): Array<Quiz?> {
-            return arrayOfNulls(p0)
+        override fun newArray(size: Int): Array<Quiz?> {
+            return arrayOfNulls(size)
         }
-    }
-
-
-
-}
-
-class StringListTypeConverter {
-    @TypeConverter
-    fun stringListToString(stringList: List<String>?) : String? {
-        return stringList?.joinToString(",")
-    }
-
-    @TypeConverter
-    fun stringToStringList(string: String?) : List<String>? {
-        return string?.split(",")?.toList()
     }
 }
