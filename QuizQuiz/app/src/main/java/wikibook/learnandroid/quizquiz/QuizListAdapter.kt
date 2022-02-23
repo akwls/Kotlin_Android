@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import wikibook.learnandroid.quizquiz.database.Quiz
 
-class QuizListAdapter(private val dataList: List<Quiz>) : RecyclerView.Adapter<QuizListAdapter.ItemViewHolder>() {
-    class ItemViewHolder(val view: View) :RecyclerView.ViewHolder(view) {
+class QuizListAdapter(private val dataList: List<Quiz>, private val fragment: Fragment) : RecyclerView.Adapter<QuizListAdapter.ItemViewHolder>() {
+    class ItemViewHolder(val view: View, val fragment: Fragment) :RecyclerView.ViewHolder(view) {
         lateinit var quiz: Quiz
         val quizQuestion = view.findViewById<TextView>(R.id.question)
 
@@ -18,7 +19,8 @@ class QuizListAdapter(private val dataList: List<Quiz>) : RecyclerView.Adapter<Q
                 val intent = Intent(it.context, QuizManageActivity::class.java)
                 intent.putExtra("mode", "modify")
                 intent.putExtra("quiz", quiz)
-                it.context.startActivity(intent)
+                intent.putExtra("position", adapterPosition)
+               fragment.startActivityForResult(intent, 1)
             }
         }
 
@@ -31,7 +33,7 @@ class QuizListAdapter(private val dataList: List<Quiz>) : RecyclerView.Adapter<Q
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
 
-        return ItemViewHolder(view)
+        return ItemViewHolder(view, fragment)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) = holder.bind(dataList[position])

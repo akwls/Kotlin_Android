@@ -1,5 +1,7 @@
 package wikibook.learnandroid.quizquiz
 
+import android.app.Activity
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.text.Editable
@@ -83,7 +85,23 @@ class QuizManageActivity: AppCompatActivity() {
 
         findViewById<Button>(R.id.confirm).setOnClickListener {
             AsyncTask.execute {
-                if(quiz.type == "multiple_choice") {
+
+                var validationFail = false
+                var reason: String = ""
+
+                if(quiz.question!!.isBlank()) {
+                    validationFail = true
+                    reason = "문두가 있어야 합니다."
+                }
+
+                if(quiz.type == "ox") {
+                    val answerShouldOorX = ((quiz.answer == "o") || (quiz.answer == "x"))
+                    if(!answerShouldOorX) {
+                        validationFail = true
+                        reason = "정답은 o거나 x여야 합니다."
+                    }
+                }
+                else {
                     val guesses = mutableListOf<String>()
                     for(i in 0 until choices.childCount) {
                         val guess = ((choices.getChildAt(i) as ViewGroup).getChildAt(0) as EditText).text.toString()
@@ -91,18 +109,40 @@ class QuizManageActivity: AppCompatActivity() {
                             guesses.add(guess)
                         }
                     }
-                    quiz.guesses = guesses
+
+                    if(guesses.size < 2) {
+                        validationFail = true
+                        reason = "정상적인 내용이 포함된 2개 이상의 선지가 필요합니다."
+                    }
+                    else {
+                        quiz.guesses = guesses
+                    }
+
                 }
                 quiz.category = quiz.category?.trim()
                 quiz.question = quiz.question?.trim()
 
-                if(mode == "modify") {
-                    db.quizDAO().update(quiz)
+                if(!validationFail) {
+                    if(mode == "modify") {
+                        db.quizDAO().update(quiz)
+                    }
+                    else {
+                        val id = db.quizDAO().insert(quiz)
+                        quiz.id = id
+                    }
+
+                    val resultIntent = Intent()
+                    resultIntent.putExtra("operation", mode)
+                    resultIntent.putExtra("quiz", quiz)
+
+                    setResult(Activity.RESULT_OK, resultIntent)
+                    finish()
                 }
                 else {
-                    db.quizDAO().insert(quiz)
+                    runOnUiThread { Toast.makeText(this, reason, Toast.LENGTH_SHORT).show() }
                 }
-                finish()
+
+
             }
         }
 
@@ -111,6 +151,13 @@ class QuizManageActivity: AppCompatActivity() {
             findViewById<Button>(R.id.delete).setOnClickListener {
                 AsyncTask.execute {
                     db.quizDAO().delete(quiz)
+
+                    val resultIntent = Intent()
+                    resultIntent.putExtra("operation", "delete")
+                    resultIntent.putExtra("quiz", quiz)
+                    resultIntent.putExtra("position", intent.getIntExtra("position", -1))
+
+                    setResult(Activity.RESULT_OK, resultIntent)
                     finish()
                 }
             }
@@ -143,9 +190,8 @@ class QuizManageActivity: AppCompatActivity() {
         for(choice in listOf("o", "x")) {
             var btn = Button(this)
             btn.text = choice
-            btn.setOnClickListener {
-                choices.addView(btn)
-            }
+            btn.setOnClickListener(listener)
+            choices.addView(btn)
         }
     }
 
@@ -160,7 +206,12 @@ class QuizManageActivity: AppCompatActivity() {
             quiz.answer = ((it.parent as ViewGroup).getChildAt(0) as EditText).text.toString()
         }
         val removeEditListener = View.OnClickListener {
-            choices.removeView(it.parent as ViewGroup)
+            if(choices.childCount > 2) {
+                choices.removeView(it.parent as ViewGroup)
+            }
+            else {
+                Toast.makeText(this, "N지선다 문제는 최소한 2개의 선택지를 포함해야 합니다.", Toast.LENGTH_SHORT).show()
+            }
         }
         for(guess in guesses) {
             val edit = layoutInflater.inflate(R.layout.quiz_manage_multiple_choice_edit, choices, false) as ViewGroup

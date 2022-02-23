@@ -1,5 +1,6 @@
 package wikibook.learnandroid.quizquiz
 
+import android.app.Activity
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
@@ -32,7 +33,7 @@ class QuizListFragment: Fragment() {
 
             activity?.runOnUiThread {
                 val layoutManager = LinearLayoutManager(activity)
-                val adapter = QuizListAdapter(quizzes)
+                val adapter = QuizListAdapter(quizzes, this)
 
                 recyclerView = view.findViewById(R.id.quiz_list)
                 recyclerView.layoutManager = layoutManager
@@ -45,9 +46,38 @@ class QuizListFragment: Fragment() {
         view.findViewById<FloatingActionButton>(R.id.add_quiz).setOnClickListener {
             val intent = Intent(activity!!, QuizManageActivity::class.java)
             intent.putExtra("mode", "add")
-            startActivity(intent)
+            startActivityForResult(intent, 1)
         }
 
         return view
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            val operation = data?.getStringExtra("operation")
+            val quiz = data?.getParcelableExtra<Quiz>("quiz")
+
+            if(operation == "modify") {
+                for((i, q) in quizzes.withIndex()) {
+                    if(quiz?.id == q.id) {
+                        quizzes[i] = quiz!!
+                        recyclerView.adapter?.notifyDataSetChanged()
+                    }
+                }
+            }
+            else if(operation == "delete") {
+                val position = data.getIntExtra("position", -1)
+                if(position != -1) {
+                    quizzes.removeAt(position)
+                    recyclerView.adapter?.notifyDataSetChanged()
+                }
+            }
+            else {
+                quizzes.add(quiz!!)
+                recyclerView.adapter?.notifyDataSetChanged()
+            }
+        }
     }
 }
