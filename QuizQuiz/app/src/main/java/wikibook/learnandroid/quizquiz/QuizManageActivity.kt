@@ -22,7 +22,14 @@ class QuizManageActivity: AppCompatActivity() {
         setContentView(R.layout.quiz_manage_activity)
 
         mode = intent.getStringExtra("mode")!!
-        quiz = intent.getParcelableExtra<Quiz>("quiz")!!
+        if(mode == "modify") {
+            quiz = intent.getParcelableExtra<Quiz>("quiz")!!
+            findViewById<Button>(R.id.confirm).text = "퀴즈 수정"
+        }
+        else {
+            quiz = Quiz(type="ox", question ="", answer = "o", category = "")
+            findViewById<Button>(R.id.confirm).text = "퀴즈 추가"
+        }
 
         db = QuizDatabase.getInstance(this)
 
@@ -89,18 +96,26 @@ class QuizManageActivity: AppCompatActivity() {
                 quiz.category = quiz.category?.trim()
                 quiz.question = quiz.question?.trim()
 
-                db.quizDAO().update(quiz)
+                if(mode == "modify") {
+                    db.quizDAO().update(quiz)
+                }
+                else {
+                    db.quizDAO().insert(quiz)
+                }
                 finish()
             }
         }
 
-        findViewById<Button>(R.id.delete).visibility = View.VISIBLE
-        findViewById<Button>(R.id.delete).setOnClickListener {
-            AsyncTask.execute {
-                db.quizDAO().delete(quiz)
-                finish()
+        if(mode == "modify") {
+            findViewById<Button>(R.id.delete).visibility = View.VISIBLE
+            findViewById<Button>(R.id.delete).setOnClickListener {
+                AsyncTask.execute {
+                    db.quizDAO().delete(quiz)
+                    finish()
+                }
             }
         }
+
 
         categoryEdit.setText(quiz.category)
         questionEdit.setText(quiz.question)
