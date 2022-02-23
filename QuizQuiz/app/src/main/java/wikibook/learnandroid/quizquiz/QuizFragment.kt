@@ -31,12 +31,12 @@ class QuizFragment: Fragment(), QuizStartFragment.QuizStartListener, QuizSolveFr
 
     }
 
-    override fun onQuizStart() {
+    override fun onQuizStart(category: String) {
         AsyncTask.execute {
             currentQuizIdx = 0
             correctCount = 0
 
-            quizList = db.quizDAO().getAll()
+            quizList = if(category == "전부") db.quizDAO().getAll() else db.quizDAO().getAll(category)
             childFragmentManager.beginTransaction().replace(R.id.fragment_container, QuizSolveFragment.newInstance(quizList[currentQuizIdx])).commit()
         }
     }

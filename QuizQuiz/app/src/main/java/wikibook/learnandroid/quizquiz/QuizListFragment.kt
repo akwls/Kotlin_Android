@@ -4,9 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +23,8 @@ class QuizListFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.quiz_list_fragment, container, false)
+
+        setHasOptionsMenu(true)
 
         db = QuizDatabase.getInstance(context!!)
 
@@ -79,5 +79,41 @@ class QuizListFragment: Fragment() {
                 recyclerView.adapter?.notifyDataSetChanged()
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        AsyncTask.execute {
+            val categories = db.quizDAO().getCategories()
+
+            activity?.runOnUiThread {
+                val categoryMenu = menu.add("전부")
+                categoryMenu.setIcon(android.R.drawable.ic_menu_view)
+                categoryMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+
+                for(c in categories) {
+                    val categoryMenu = menu.add(c)
+                    categoryMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                }
+            }
+        }
+        true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        AsyncTask.execute {
+            val category = item.toString()
+            if(category == "전부") {
+                quizzes = db.quizDAO().getAll().toMutableList()
+            }
+            else {
+                quizzes = db.quizDAO().getAll(category).toMutableList()
+            }
+
+            activity?.runOnUiThread {
+                val adapter = QuizListAdapter(quizzes, this)
+                recyclerView.swapAdapter(adapter, false)
+            }
+        }
+        return true
     }
 }
