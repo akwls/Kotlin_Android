@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import wikibook.learnandroid.quizquiz.database.Quiz
 import wikibook.learnandroid.quizquiz.database.QuizDatabase
@@ -25,19 +26,20 @@ class QuizFragment: Fragment(), QuizStartFragment.QuizStartListener, QuizSolveFr
 
         db = QuizDatabase.getInstance(context!!)
 
-        childFragmentManager.beginTransaction().replace(R.id.fragment_container, QuizStartFragment()).commit()
+        childFragmentManager.beginTransaction().setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out).replace(R.id.fragment_container, QuizStartFragment()).commit()
 
         return view
 
     }
 
     override fun onQuizStart(category: String) {
+        (activity as AppCompatActivity).supportActionBar?.hide()
         AsyncTask.execute {
             currentQuizIdx = 0
             correctCount = 0
 
             quizList = if(category == "전부") db.quizDAO().getAll() else db.quizDAO().getAll(category)
-            childFragmentManager.beginTransaction().replace(R.id.fragment_container, QuizSolveFragment.newInstance(quizList[currentQuizIdx])).commit()
+            childFragmentManager.beginTransaction().replace(R.id.fragment_container, QuizSolveFragment.newInstance(quizList[currentQuizIdx], 1, quizList.size)).commit()
         }
     }
 
@@ -47,10 +49,11 @@ class QuizFragment: Fragment(), QuizStartFragment.QuizStartListener, QuizSolveFr
         currentQuizIdx++
 
         if(currentQuizIdx == quizList.size) {
+            (activity as AppCompatActivity).supportActionBar?.show()
             childFragmentManager.beginTransaction().replace(R.id.fragment_container, QuizResultFragment.newInstance(correctCount, quizList.size)).commit()
         }
         else {
-            childFragmentManager.beginTransaction().replace(R.id.fragment_container, QuizSolveFragment.newInstance(quizList[currentQuizIdx])).commit()
+            childFragmentManager.beginTransaction().setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right).replace(R.id.fragment_container, QuizSolveFragment.newInstance(quizList[currentQuizIdx], currentQuizIdx+1, quizList.size)).commit()
         }
     }
 

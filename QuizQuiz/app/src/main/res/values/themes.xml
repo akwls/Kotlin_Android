@@ -13,4 +13,12 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="AnswerButtonStyle">
+        <item name="android:background">@drawable/answer_choice_button_bg_trans</item>
+        <item name="android:fontFamily">@font/cookierun_bold</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#000000</item>
+    </style>
 </resources>

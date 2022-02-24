@@ -3,6 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/QuizQuiz/app/src/main/res/drawable/answer_choice_button_bg.xml" value="0.275" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/QuizQuiz/app/src/main/res/drawable/answer_choice_button_bg_trans.xml" value="0.275" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/QuizQuiz/app/src/main/res/drawable/answer_choice_button_bg_trans_from.xml" value="0.275" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/QuizQuiz/app/src/main/res/drawable/answer_choice_button_bg_trans_to.xml" value="0.275" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/QuizQuiz/app/src/main/res/drawable/card_gradient.xml" value="0.275" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/QuizQuiz/app/src/main/res/drawable/ic_happy.xml" value="0.275" />
+        <entry key="..\:/Users/hajin/KotlinAndroidProjects/QuizQuiz/app/src/main/res/layout/answer_choice_button.xml" value="0.25885416666666666" />
         <entry key="..\:/Users/hajin/KotlinAndroidProjects/QuizQuiz/app/src/main/res/layout/nav_header.xml" value="0.1328125" />
         <entry key="..\:/Users/hajin/KotlinAndroidProjects/QuizQuiz/app/src/main/res/layout/quiz_fragment.xml" value="0.25885416666666666" />
         <entry key="..\:/Users/hajin/KotlinAndroidProjects/QuizQuiz/app/src/main/res/layout/quiz_list_fragment.xml" value="0.25885416666666666" />

@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="cardGradientFrom">#037FFC</color>
+    <color name="cardGradientTo">#0064C9</color>
+    <color name="answerChoiceButtonColorFrom">#00cfffc2</color>
+    <color name="answerChoiceButtonColorTo">#FFcfffc2</color>
 </resources>
