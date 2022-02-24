@@ -2,6 +2,8 @@ package wikibook.learnandroid.quizquiz
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.AsyncTask
 import android.os.Bundle
 import android.text.Editable
@@ -185,6 +187,8 @@ class QuizManageActivity: AppCompatActivity() {
 
         val listener = View.OnClickListener {
             quiz.answer = (it as Button).text.toString()
+            (it as Button).setTextColor(Color.RED)
+            (it as Button).setTypeface(null, Typeface.BOLD)
         }
 
         for(choice in listOf("o", "x")) {
@@ -204,7 +208,10 @@ class QuizManageActivity: AppCompatActivity() {
 
         val setAnswerListener = View.OnClickListener {
             quiz.answer = ((it.parent as ViewGroup).getChildAt(0) as EditText).text.toString()
+            ((it.parent as ViewGroup).getChildAt(0) as EditText).setTextColor(Color.RED)
+            ((it.parent as ViewGroup).getChildAt(0) as EditText).setTypeface(null, Typeface.BOLD)
         }
+
         val removeEditListener = View.OnClickListener {
             if(choices.childCount > 2) {
                 choices.removeView(it.parent as ViewGroup)

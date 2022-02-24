@@ -8,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import wikibook.learnandroid.quizquiz.database.QuizDatabase
 import java.lang.Exception
 
 class QuizStartFragment: Fragment() {
-    interface QuizStartListener { fun onQuizStart(selected: String) }
+    interface QuizStartListener { fun onQuizStart(selected: String, quizCount: Int) }
 
     lateinit var listener: QuizStartListener
 
@@ -41,9 +42,12 @@ class QuizStartFragment: Fragment() {
         db = QuizDatabase.getInstance(context!!)
         val categorySpinner = view.findViewById<Spinner>(R.id.quiz_category)
 
+
+
         view.findViewById<Button>(R.id.start).setOnClickListener {
             val selected = categorySpinner.selectedItem.toString()
-            listener.onQuizStart(selected)
+            val quizCount = view.findViewById<EditText>(R.id.quiz_count).text.toString().toInt()
+            listener.onQuizStart(selected, quizCount)
         }
 
         AsyncTask.execute {

@@ -32,13 +32,16 @@ class QuizFragment: Fragment(), QuizStartFragment.QuizStartListener, QuizSolveFr
 
     }
 
-    override fun onQuizStart(category: String) {
+    override fun onQuizStart(category: String, quizCount: Int) {
         (activity as AppCompatActivity).supportActionBar?.hide()
         AsyncTask.execute {
             currentQuizIdx = 0
             correctCount = 0
 
             quizList = if(category == "전부") db.quizDAO().getAll() else db.quizDAO().getAll(category)
+            if(quizCount < quizList.size) {
+                quizList = quizList.subList(0, quizCount)
+            }
             childFragmentManager.beginTransaction().replace(R.id.fragment_container, QuizSolveFragment.newInstance(quizList[currentQuizIdx], 1, quizList.size)).commit()
         }
     }

@@ -7,13 +7,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.loader.content.AsyncTaskLoader
 import com.google.android.material.internal.NavigationMenu
 import com.google.android.material.navigation.NavigationView
 import org.w3c.dom.Element
+import org.w3c.dom.Text
 import wikibook.learnandroid.quizquiz.database.Quiz
 import wikibook.learnandroid.quizquiz.database.QuizDatabase
 import javax.xml.parsers.DocumentBuilderFactory
@@ -21,12 +25,15 @@ import javax.xml.parsers.DocumentBuilderFactory
 class QuizMainActivity : AppCompatActivity() {
     lateinit var drawerToggle: ActionBarDrawerToggle
     lateinit var db: QuizDatabase
+    lateinit var pref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.quiz_main_activity)
 
         db = QuizDatabase.getInstance(this)
+
+        pref = getSharedPreferences("pref", Context.MODE_PRIVATE)
 
         val sp : SharedPreferences = this.getSharedPreferences("pref", Context.MODE_PRIVATE)
         if(sp.getBoolean("initialized", true)) {
@@ -53,7 +60,18 @@ class QuizMainActivity : AppCompatActivity() {
             true
         }
 
-        drawerToggle = object : ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {}
+        drawerToggle = object : ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
+            override fun onDrawerOpened(drawerView: View) {
+                super.onDrawerOpened(drawerView)
+
+                val correctCount = pref.getInt("correctCount", 0)
+                val totalQuizCount = pref.getInt("totalQuizCount", 0)
+
+                navView.getHeaderView(0).findViewById<TextView>(R.id.correct_count).text = correctCount.toString()
+                navView.getHeaderView(0).findViewById<TextView>(R.id.total_quiz_count).text = totalQuizCount.toString()
+                navView.getHeaderView(0).findViewById<TextView>(R.id.correct_percent).text = "${(correctCount.toDouble() / totalQuizCount * 100)}%"
+            }
+        }
 
         drawerToggle.isDrawerIndicatorEnabled = true
         drawerLayout.addDrawerListener(drawerToggle)

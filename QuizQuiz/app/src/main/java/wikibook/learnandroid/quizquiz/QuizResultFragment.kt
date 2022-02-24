@@ -1,6 +1,7 @@
 package wikibook.learnandroid.quizquiz
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,9 @@ import java.lang.Exception
 class QuizResultFragment: Fragment() {
     interface QuizResultListener{ fun onRetry() }
     lateinit var listener: QuizResultListener
+
+    lateinit var pref: SharedPreferences
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -65,6 +69,14 @@ class QuizResultFragment: Fragment() {
         view.findViewById<Button>(R.id.retry).setOnClickListener {
             listener.onRetry()
         }
+
+        pref = context!!.getSharedPreferences("pref", Context.MODE_PRIVATE)
+        val editor = pref.edit()
+
+        editor.putInt("correctCount", correctCount)
+        editor.putInt("totalQuizCount", totalQuizCount)
+        editor.commit()
+
 
         return view
     }

@@ -6,7 +6,10 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.drawable.TransitionDrawable
 import android.media.SoundPool
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +24,8 @@ class QuizSolveFragment:Fragment() {
     interface QuizSolveListener { fun onAnswerSelected(isCorrect: Boolean) }
     lateinit var listener: QuizSolveListener
     lateinit var quiz: Quiz
+
+    lateinit var vibrator: Vibrator
 
     var answerSelected: Boolean = false
 
@@ -69,6 +74,8 @@ class QuizSolveFragment:Fragment() {
 
         val remainTimeBar = view.findViewById<ProgressBar>(R.id.remain_time_bar)
 
+        vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
         soundPool = SoundPool.Builder().build()
         correctAnswerSoundId = soundPool.load(context, R.raw.correct, 1)
         incorrectAnswerSoundId = soundPool.load(context, R.raw.incorrect, 1)
@@ -115,6 +122,16 @@ class QuizSolveFragment:Fragment() {
                 else {
                     soundPool.play(incorrectAnswerSoundId, soundVolume, soundVolume, 1, 0, 1f)
                     image.setImageResource(R.drawable.ic_unhappy)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        vibrator.vibrate(
+                            VibrationEffect.createOneShot(
+                                800,
+                                VibrationEffect.DEFAULT_AMPLITUDE
+                            )
+                        )
+                    } else {
+                        vibrator.vibrate(800)
+                    }
                 }
 
                 val imageAlphaAnimator = ObjectAnimator.ofFloat(image, "alpha", 0.0F, 1.0F)

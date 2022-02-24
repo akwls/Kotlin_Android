@@ -9,6 +9,19 @@
         android:layout_height="wrap_content"
         android:id="@+id/quiz_category" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="문제 개수"
+        android:textSize="12sp"
+        android:background="@color/design_default_color_primary"
+        android:textColor="@color/white" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/quiz_count" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
