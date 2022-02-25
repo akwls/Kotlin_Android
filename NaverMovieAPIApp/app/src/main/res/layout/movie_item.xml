@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff">
-    <TextView
+    android:background="#ffffff"
+    app:cardElevation="6dp"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="5dp" >
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="제목"
-        android:textSize="18sp"
-        android:textColor="#000"
-        android:id="@+id/movie_title" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="제목"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:id="@+id/movie_title" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/movie_rating"
-        android:textSize="18sp"
-        android:textColor="#000"
-        android:text="0" />
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/ratingBarStyleSmall"
+            android:id="@+id/movie_rating"
+            android:isIndicator="false"
+            android:numStars="10" />
+    </LinearLayout>
 
-    <!--
-    <RatingBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:isIndicator = "true"
-        android:numStars = "10"
-        android:max = "10"
-        android:id="@+id/movie_rating" />
-        -->
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>
