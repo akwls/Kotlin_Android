@@ -3,6 +3,7 @@ package wikibook.learnandroid.todayquote
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +26,8 @@ class QuoteListActivity : AppCompatActivity() {
             val quotes = db.quoteDAO().getAll().toList()
 
             val layoutManager = LinearLayoutManager(this)
+
+            Log.d("getAll", quotes.toString())
 
             val adapter = QuoteAdapter(quotes)
 

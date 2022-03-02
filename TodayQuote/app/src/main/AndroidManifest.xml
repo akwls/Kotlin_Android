@@ -10,16 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TodayQuote">
         <activity
-            android:name="com.learnandroid.todayquote.wikibook.learnandroid.todayquote.QuoteStartActivity"
+            android:name="wikibook.learnandroid.todayquote.QuoteEditActivity"
             android:exported="false" />
         <activity
-            android:name="com.learnandroid.todayquote.wikibook.learnandroid.todayquote.QuoteEditActivity"
+            android:name="wikibook.learnandroid.todayquote.QuoteListActivity"
             android:exported="false" />
         <activity
-            android:name="com.learnandroid.todayquote.wikibook.learnandroid.todayquote.QuoteListActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.learnandroid.todayquote.wikibook.learnandroid.todayquote.QuoteMainActivity"
+            android:name="wikibook.learnandroid.todayquote.QuoteMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
